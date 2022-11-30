@@ -117,7 +117,7 @@ public class SystemUtil {
 		return true;
 	}
 
-	// public static void main(String[] args) {
-	// System.out.println(getProjectName());
-	// }
+	public static void main(String[] args) {
+		System.out.println(getProjectClassesPath());
+	}
 }

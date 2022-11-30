@@ -9,6 +9,7 @@ import com.baidu.ueditor.define.State;
 import com.baidu.ueditor.hunter.FileManager;
 import com.baidu.ueditor.hunter.ImageHunter;
 import com.baidu.ueditor.upload.Uploader;
+import com.xnx3.Log;
 import com.xnx3.j2ee.util.SystemUtil;
 
 public class ActionEnter {
@@ -107,9 +108,10 @@ public class ActionEnter {
 				
 			case ActionMap.LIST_IMAGE:
 			case ActionMap.LIST_FILE:
-				conf = configManager.getConfig( actionCode );
-				int start = this.getStartIndex();
-				state = new FileManager( conf ).listFile( start );
+//				conf = configManager.getConfig( actionCode );
+//				int start = this.getStartIndex();
+//				state = new FileManager( conf ).listFile( start );
+				Log.info("LIST_FILE is not realize ! github: https://github.com/xnx3/ueditor-fileupload");
 				break;
 				
 		}

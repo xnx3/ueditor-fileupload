@@ -1,10 +1,7 @@
 package com.baidu.qikemi.packages.alibaba.aliyun.oss;
 
 import java.util.List;
-import com.aliyun.openservices.oss.OSSClient;
 //import com.aliyun.openservices.oss.OSSClient;
-import com.aliyun.openservices.oss.model.Bucket;
-import com.aliyun.openservices.oss.model.CannedAccessControlList;
 
 /**
  * Bucket是OSS上的命名空间，也是计费、权限控制、日志记录等高级功能的管理实体；Bucket名称在整个OSS服务中具有全局唯一性，且不能修改；
@@ -28,10 +25,10 @@ public class BucketService {
 	 * 
 	 * @return
 	 */
-	public static Bucket create(OSSClient client, String bucketName) {
-		Bucket bucket = client.createBucket(bucketName);
-		return bucket;
-	}
+//	public static Bucket create(OSSClient client, String bucketName) {
+//		Bucket bucket = client.createBucket(bucketName);
+//		return bucket;
+//	}
 //
 //	/**
 //	 * 列出用户所有的Bucket<br>

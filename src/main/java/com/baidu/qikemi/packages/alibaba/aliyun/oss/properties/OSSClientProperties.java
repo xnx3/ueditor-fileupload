@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-import com.qikemi.packages.utils.SystemUtil;
+import com.baidu.qikemi.packages.utils.SystemUtil;
 import com.xnx3.ConfigManagerUtil;
 import com.xnx3.FileUtil;
 import com.xnx3.j2ee.init.UEditorConfigLoad;

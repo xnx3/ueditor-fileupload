@@ -9,11 +9,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.baidu.ueditor.define.ActionMap;
-import com.qikemi.packages.utils.SystemUtil;
 
 /**
  * 配置管理器
@@ -161,7 +159,10 @@ public final class ConfigManager {
 		
 //		String configContent = this.readFile( this.getConfigPath() );
 //		Log.debug(SystemUtil.getProjectClassesPath()+"/ueditor_config.json");
-		String configContent = this.readFile(SystemUtil.getProjectClassesPath()+"/ueditor_config.json");
+//		String projectClassPath = SystemUtil.getProjectClassesPath();
+//		Log.debug("projectClassPath:"+projectClassPath);
+//		Log.debug("config : "+SystemUtil.getProjectClassesPath()+"/ueditor_config.json");
+		String configContent = this.readFile(this.rootPath+"/ueditor_config.json");
 		
 		try{
 			JSONObject jsonConfig = new JSONObject( configContent );

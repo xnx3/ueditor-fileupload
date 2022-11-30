@@ -5,20 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
-import com.aliyun.openservices.oss.OSSClient;
-import com.aliyun.openservices.oss.model.ListObjectsRequest;
-import com.aliyun.openservices.oss.model.OSSObject;
-import com.aliyun.openservices.oss.model.OSSObjectSummary;
-import com.aliyun.openservices.oss.model.ObjectListing;
-import com.aliyun.openservices.oss.model.ObjectMetadata;
-import com.aliyun.openservices.oss.model.PutObjectResult;
-import com.qikemi.packages.utils.SystemUtil;
-import com.xnx3.j2ee.util.AttachmentUtil;
-import com.xnx3.j2ee.util.ConsoleUtil;
+import com.baidu.qikemi.packages.utils.SystemUtil;
+import com.xnx3.Log;
+import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
+import cn.zvo.fileupload.vo.UploadFileVO;
 
 /**
  * Object是OSS中最基本的数据单元，你可以把它简单地理解为文件<br>
@@ -78,11 +72,11 @@ public class ObjectService {
 			ObjectService.putObject(key, fileInputStream);
 			return true;
 		} catch (FileNotFoundException e) {
-			ConsoleUtil.error("upload file to aliyun OSS object server occur FileNotFoundException.");
+			Log.error("upload file to aliyun OSS object server occur FileNotFoundException.");
 		} catch (NumberFormatException e) {
-			ConsoleUtil.error("upload file to aliyun OSS object server occur NumberFormatException.");
+			Log.error("upload file to aliyun OSS object server occur NumberFormatException.");
 		} catch (IOException e) {
-			ConsoleUtil.error("upload file to aliyun OSS object server occur IOException.");
+			Log.error("upload file to aliyun OSS object server occur IOException.");
 		}
 		return false;
 	}
@@ -123,75 +117,81 @@ public class ObjectService {
 			throws NumberFormatException, IOException {
 
 		// 创建上传Object的Metadata
-		ObjectMetadata meta = new ObjectMetadata();
+		Map<String, Object> map = new HashMap<String, Object>();
+//		ObjectMetadata meta = new ObjectMetadata();
 
 		// 必须设置ContentLength
-		meta.setContentLength(Integer.parseInt(String.valueOf(content .available())));
+		map.put("contentLength", Integer.parseInt(String.valueOf(content .available())));
 		// 用户自定义文件名称
-		meta.addUserMetadata("filename", key);
-		ConsoleUtil.debug("putObject--filename : "+key);
+//		meta.addUserMetadata("filename", key);
+		map.put("filename", key);
+		Log.debug("putObject--filename : "+key);
 		
 		// 上传Object.
 //		PutObjectResult result = client.putObject(bucketName, key, content, meta);
-		AttachmentUtil.putForUEditor(key, content, meta);
+		//AttachmentUtil.putForUEditor(key, content, map);
+		UploadFileVO vo = FileUploadUtil.upload(key, content);
+		Log.debug(vo.toString());
 	}
 	
-	/**
-	 * 列出Object<br>
-	 * 
-	 * @param client
-	 * @param bucketName
-	 * @param delimiter
-	 *            Delimiter 设置为 “/” 时，返回值就只罗列该文件夹下的文件，可以null
-	 * @param prefix
-	 *            Prefix 设为某个文件夹名，就可以罗列以此 Prefix 开头的文件，可以null
-	 * @return
-	 */
-	public static List<String> listObject(OSSClient client, String bucketName,
-			String delimiter, String prefix) {
-
-		// 是否循环的标识
-		boolean hasNext = false;
-		// 设定结果从Marker之后按字母排序的第一个开始返回
-		String marker = "";
-		//
-		// ObjectListing listing = new ObjectListing();
-		List<String> filePathList = new ArrayList<String>();
-		// 构造ListObjectsRequest请求
-		ListObjectsRequest listObjectsRequest = new ListObjectsRequest(
-				bucketName);
-
-		// 是一个用于对Object名字进行分组的字符。所有名字包含指定的前缀且第一次出现Delimiter字符之间的object作为一组元素:
-		// CommonPrefixes
-		listObjectsRequest.setDelimiter(delimiter);
-		// 限定此次返回object的最大数，如果不设定，默认为100，MaxKeys取值不能大于1000
-		listObjectsRequest.setMaxKeys(20);
-		// 限定返回的object key必须以Prefix作为前缀。注意使用prefix查询时，返回的key中仍会包含Prefix
-		listObjectsRequest.setPrefix(prefix);
-
-		do {
-			// 设定结果从Marker之后按字母排序的第一个开始返回
-			listObjectsRequest.setMarker(marker);
-			// 获取指定bucket下的所有Object信息
-			ObjectListing sublisting = client.listObjects(listObjectsRequest);
-			// 如果Bucket中的Object数量大于100，则只会返回100个Object， 且返回结果中 IsTruncated
-			// 为false
-			if (sublisting.isTruncated()) {
-				hasNext = true;
-				marker = sublisting.getNextMarker();
-			} else {
-				hasNext = false;
-				marker = "";
-			}
-			// // 遍历所有Object
-			for (OSSObjectSummary objectSummary : sublisting.getObjectSummaries()) {
-				// System.out.println(objectSummary.getKey());
-				filePathList.add("/"+objectSummary.getKey());
-			}
-		} while (hasNext);
-
-		return filePathList;
-	}
+//	/**
+//	 * 列出Object<br>
+//	 * 
+//	 * @param client
+//	 * @param bucketName
+//	 * @param delimiter
+//	 *            Delimiter 设置为 “/” 时，返回值就只罗列该文件夹下的文件，可以null
+//	 * @param prefix
+//	 *            Prefix 设为某个文件夹名，就可以罗列以此 Prefix 开头的文件，可以null
+//	 * @return
+//	 */
+//	public static List<String> listObject(String bucketName,
+//			String delimiter, String prefix) {
+//
+//		// 是否循环的标识
+//		boolean hasNext = false;
+//		// 设定结果从Marker之后按字母排序的第一个开始返回
+//		String marker = "";
+//		//
+//		// ObjectListing listing = new ObjectListing();
+//		List<String> filePathList = new ArrayList<String>();
+//		// 构造ListObjectsRequest请求
+//		ListObjectsRequest listObjectsRequest = new ListObjectsRequest(
+//				bucketName);
+//		
+//		FileUploadUtil.getSubFileList(marker)
+//
+//		// 是一个用于对Object名字进行分组的字符。所有名字包含指定的前缀且第一次出现Delimiter字符之间的object作为一组元素:
+//		// CommonPrefixes
+//		listObjectsRequest.setDelimiter(delimiter);
+//		// 限定此次返回object的最大数，如果不设定，默认为100，MaxKeys取值不能大于1000
+//		listObjectsRequest.setMaxKeys(20);
+//		// 限定返回的object key必须以Prefix作为前缀。注意使用prefix查询时，返回的key中仍会包含Prefix
+//		listObjectsRequest.setPrefix(prefix);
+//
+//		do {
+//			// 设定结果从Marker之后按字母排序的第一个开始返回
+//			listObjectsRequest.setMarker(marker);
+//			// 获取指定bucket下的所有Object信息
+//			ObjectListing sublisting = client.listObjects(listObjectsRequest);
+//			// 如果Bucket中的Object数量大于100，则只会返回100个Object， 且返回结果中 IsTruncated
+//			// 为false
+//			if (sublisting.isTruncated()) {
+//				hasNext = true;
+//				marker = sublisting.getNextMarker();
+//			} else {
+//				hasNext = false;
+//				marker = "";
+//			}
+//			// // 遍历所有Object
+//			for (OSSObjectSummary objectSummary : sublisting.getObjectSummaries()) {
+//				// System.out.println(objectSummary.getKey());
+//				filePathList.add("/"+objectSummary.getKey());
+//			}
+//		} while (hasNext);
+//
+//		return filePathList;
+//	}
 	
 	
 //	public static List<String> listObject(String delimiter, String prefix) {
