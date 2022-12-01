@@ -8,7 +8,7 @@ ueditor 跟 [FileUpload](https://github.com/xnx3/FileUpload) 的整合，可将�
 <!-- 引入 ueditor -->
 <dependency> 
 	<groupId>cn.zvo.fileupload</groupId>
-	<artifactId>framework.springboot.ueditor</artifactId>
+	<artifactId>fileupload-framework.ueditor</artifactId>
 	<version>1.0</version>
 </dependency>
 ````
