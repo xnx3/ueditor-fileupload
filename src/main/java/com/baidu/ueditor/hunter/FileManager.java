@@ -14,7 +14,6 @@ import com.baidu.ueditor.define.State;
 import com.baidu.qikemi.packages.alibaba.aliyun.oss.BucketService;
 import com.baidu.qikemi.packages.alibaba.aliyun.oss.OSSClientFactory;
 import com.baidu.qikemi.packages.alibaba.aliyun.oss.ObjectService;
-import com.baidu.qikemi.packages.alibaba.aliyun.oss.properties.OSSClientProperties;
 import com.baidu.qikemi.packages.utils.SystemUtil;
 
 public class FileManager {
@@ -117,27 +116,27 @@ public class FileManager {
 		
 	}
 	
-	// 处理ailiyun数据 
-	private State getOSSState ( Object[] files ) {
-		
-		MultiState state = new MultiState( true );
-		BaseState fileState = null;
-		
-//		File file = null;
-		
-		for ( Object obj : files ) {
-			if ( obj == null ) {
-				break;
-			}
-//			file = (File)obj;
-			fileState = new BaseState( true );
-			fileState.putInfo( "url", PathFormat.format( OSSClientProperties.ossEndPoint + obj ) );
-			state.addState( fileState );
-		}
-		
-		return state;
-		
-	}
+//	// 处理ailiyun数据 
+//	private State getOSSState ( Object[] files ) {
+//		
+//		MultiState state = new MultiState( true );
+//		BaseState fileState = null;
+//		
+////		File file = null;
+//		
+//		for ( Object obj : files ) {
+//			if ( obj == null ) {
+//				break;
+//			}
+////			file = (File)obj;
+//			fileState = new BaseState( true );
+//			fileState.putInfo( "url", PathFormat.format( OSSClientProperties.ossEndPoint + obj ) );
+//			state.addState( fileState );
+//		}
+//		
+//		return state;
+//		
+//	}
 	
 	private String getPath ( File file ) {
 		

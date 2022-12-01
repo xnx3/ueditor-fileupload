@@ -1,6 +1,5 @@
 package com.baidu.qikemi.packages.alibaba.aliyun.oss;
 
-import com.baidu.qikemi.packages.alibaba.aliyun.oss.properties.OSSClientProperties;
 
 /**
  * OSSClient是OSS服务的Java客户端，它为调用者提供了一系列的方法，用于和OSS服务进行交互<br>

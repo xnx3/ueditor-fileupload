@@ -1,26 +1,15 @@
 package com.baidu.ueditor.upload;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.State;
-import com.baidu.qikemi.packages.alibaba.aliyun.oss.properties.OSSClientProperties;
-import com.baidu.qikemi.packages.baidu.ueditor.upload.AsynUploaderThreader;
 import com.baidu.qikemi.packages.baidu.ueditor.upload.SynUploader;
 import com.baidu.qikemi.packages.utils.SystemUtil;
-import com.xnx3.DateUtil;
-import com.xnx3.UrlUtil;
-import com.xnx3.j2ee.util.AttachmentUtil;
-import com.xnx3.j2ee.util.ConsoleUtil;
+import com.xnx3.Log;
 import com.xnx3.j2ee.util.SessionUtil;
-import com.xnx3.j2ee.vo.UploadFileVO;
-
-import cn.zvo.fileupload.framework.springboot.FileUpload;
 import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
 import cn.zvo.fileupload.storage.local.LocalStorage;
 
@@ -48,51 +37,46 @@ public class Uploader {
 		JSONObject stateJson = new JSONObject(state.toJSONString());
 //		String bucketName = OSSClientProperties.bucketName;
 //		OSSClient client = OSSClientFactory.createOSSClient();
-		if (OSSClientProperties.useAsynUploader) {
-			ConsoleUtil.debug(state.toJSONString());
-			AsynUploaderThreader asynThreader = new AsynUploaderThreader();
-			asynThreader.init(stateJson, this.request);
-			Thread uploadThreader = new Thread(asynThreader);
-			uploadThreader.start();
-		} else {
-			ConsoleUtil.debug(state.toJSONString());
+//		if (OSSClientProperties.useAsynUploader) {
+//			ConsoleUtil.debug(state.toJSONString());
+//			AsynUploaderThreader asynThreader = new AsynUploaderThreader();
+//			asynThreader.init(stateJson, this.request);
+//			Thread uploadThreader = new Thread(asynThreader);
+//			uploadThreader.start();
+//		} else {
+			Log.debug(state.toJSONString());
 			SynUploader synUploader = new SynUploader();
 			synUploader.upload(stateJson, this.request);
-		}
-		if (false == OSSClientProperties.useLocalStorager) {
-			String uploadFilePath = (String) this.conf.get("rootPath") + (String) stateJson.get("url");
-			File uploadFile = new File(uploadFilePath);
-			if (uploadFile.isFile() && uploadFile.exists()) {
-				uploadFile.delete();
-			}
-		}
-		state.putInfo("url", OSSClientProperties.ossEndPoint + stateJson.getString("url"));
-		ConsoleUtil.debug("state.url : "+OSSClientProperties.ossEndPoint + stateJson.getString("url"));
-		ConsoleUtil.debug("state.url : "+state.toJSONString());
+//		}
+//		if (false == OSSClientProperties.useLocalStorager) {
+//			String uploadFilePath = (String) this.conf.get("rootPath") + (String) stateJson.get("url");
+//			File uploadFile = new File(uploadFilePath);
+//			if (uploadFile.isFile() && uploadFile.exists()) {
+//				uploadFile.delete();
+//			}
+//		}
+		state.putInfo("url", stateJson.getString("url"));
+		Log.debug("state.url : "+stateJson.getString("url"));
+		Log.debug("state.url : "+state.toJSONString());
 		return state;
 	}
 	
 	public final State doExec() {
-		ConsoleUtil.debug("doExec--");
 		State state = null;
 		//是否有限制某用户上传
-		if(OSSClientProperties.astrictUpload){
-			if(!SessionUtil.isAllowUploadForUEditor()){
-				return new BaseState(false, OSSClientProperties.astrictUploadMessage);
-			}
+		if(!SessionUtil.isAllowUploadForUEditor()){
+			return new BaseState(false, "不允许上传文件");
 		}
 		
 		String filedName = (String) this.conf.get("fieldName");
 		if ("true".equals(this.conf.get("isBase64"))) {
 			state = Base64Uploader.save(this.request.getParameter(filedName),
 					this.conf);
-			ConsoleUtil.debug("doExec--isBase64--"+state.toJSONString());
+			Log.debug("doExec--isBase64--"+state.toJSONString());
 		} else {
-			ConsoleUtil.debug("doExec--not isBase64");
+			Log.debug("doExec--not isBase64");
 			state = BinaryUploader.save(this.request, this.conf);
 			JSONObject stateJson = new JSONObject(state.toJSONString());
-			
-			ConsoleUtil.debug("doExec--OSSClientProperties.useStatus: "+OSSClientProperties.useStatus);
 			
 			//判断 AttachmentUtil.mode 的模式，根据其不同，上传方式不同。
 //			if(AttachmentUtil.isMode(AttachmentUtil.MODE_ALIYUN_OSS)){
@@ -151,7 +135,7 @@ public class Uploader {
 					if(filePath != null && filePath.indexOf("/") == 0) {
 						filePath = filePath.substring(1, filePath.length());
 					}
-					state.putInfo("url",  AttachmentUtil.netUrl() + SystemUtil.getProjectName() + filePath);
+					state.putInfo("url",  FileUploadUtil.fileupload.getDomain() + SystemUtil.getProjectName() + filePath);
 				}else{
 					//不成功，忽略。自然会在客户端弹出提示
 				}
@@ -170,12 +154,9 @@ public class Uploader {
 				//组合url
 				String uploadPath = stateJson.getString("url"); //上传的路径，如  /site/219/news/20191119/2234234.png
 				if(uploadPath.indexOf("/") == 0){
-					//如果最开始是 / ，那么判断一下 OSSClientProperties.ossEndPoint 中，域名最后是否加 / 了，如果加了，那么uploadPath 最开头的的这个/去掉
-					if(OSSClientProperties.ossEndPoint.lastIndexOf("/")+1 == OSSClientProperties.ossEndPoint.length()){
-						uploadPath = uploadPath.substring(1, uploadPath.length());
-					}
+					uploadPath = uploadPath.substring(1, uploadPath.length());
 				}
-				state.putInfo("url", AttachmentUtil.netUrl() + uploadPath);
+				state.putInfo("url", FileUploadUtil.fileupload.getDomain() + uploadPath);
 			}
 			
 			// 判别云同步方式

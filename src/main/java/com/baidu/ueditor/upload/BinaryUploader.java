@@ -5,7 +5,6 @@ import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.FileType;
 import com.baidu.ueditor.define.State;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;

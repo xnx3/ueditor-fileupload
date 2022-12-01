@@ -4,8 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.xnx3.Log;
 import com.xnx3.j2ee.shiro.ShiroFunc;
-import com.xnx3.j2ee.util.ConsoleUtil;
 import com.xnx3.j2ee.util.SessionUtil;
 
 public class PathFormat {
@@ -66,9 +66,9 @@ public class PathFormat {
 		}
 //		System.out.println("-------parse------->>"+input);
 		input = input.replaceAll("\\{userid\\}", userid+"");
-		ConsoleUtil.debug("input---user--:"+input);
+		Log.debug("input---user--:"+input);
 		input = input.replaceAll("\\{uploadParam1\\}", SessionUtil.getUeUploadParam1());
-		ConsoleUtil.debug("input---uploadP---:"+input);
+		Log.debug("input---uploadP---:"+input);
 		
 		Pattern pattern = Pattern.compile( "\\{([^\\}]+)\\}", Pattern.CASE_INSENSITIVE  );
 		Matcher matcher = pattern.matcher(input);

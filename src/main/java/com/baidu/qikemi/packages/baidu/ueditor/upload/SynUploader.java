@@ -6,9 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
-
 import com.baidu.qikemi.packages.utils.SystemUtil;
-import com.xnx3.j2ee.util.ConsoleUtil;
+import com.xnx3.Log;
 
 import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
 
@@ -51,7 +50,7 @@ public class SynUploader extends Thread {
 	public boolean upload(JSONObject stateJson, HttpServletRequest request) {
 		String key = stateJson.getString("url").replaceFirst("/", "");
 		try {
-			ConsoleUtil.debug("upload--fileInputStream file path: "+SystemUtil.getProjectRootPath() + key);			
+			Log.debug("upload--fileInputStream file path: "+SystemUtil.getProjectRootPath() + key);			
 //			FileInputStream fileInputStream = new FileInputStream(new File(
 //					SystemUtil.getProjectRootPath() + key));
 //			ObjectService.putObject(key, fileInputStream);
@@ -59,7 +58,7 @@ public class SynUploader extends Thread {
 			
 			return true;
 		} catch (NumberFormatException e) {
-			ConsoleUtil.error("upload file to fileupload server occur NumberFormatException.");
+			Log.error("upload file to fileupload server occur NumberFormatException.");
 		}
 		return false;
 	}
