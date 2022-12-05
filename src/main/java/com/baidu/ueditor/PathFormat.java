@@ -66,9 +66,9 @@ public class PathFormat {
 		}
 //		System.out.println("-------parse------->>"+input);
 		input = input.replaceAll("\\{userid\\}", userid+"");
-		Log.debug("input---user--:"+input);
+//		Log.debug("input---user--:"+input);
 		input = input.replaceAll("\\{uploadParam1\\}", SessionUtil.getUeUploadParam1());
-		Log.debug("input---uploadP---:"+input);
+//		Log.debug("input---uploadP---:"+input);
 		
 		Pattern pattern = Pattern.compile( "\\{([^\\}]+)\\}", Pattern.CASE_INSENSITIVE  );
 		Matcher matcher = pattern.matcher(input);

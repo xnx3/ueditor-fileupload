@@ -72,9 +72,9 @@ public class Uploader {
 		if ("true".equals(this.conf.get("isBase64"))) {
 			state = Base64Uploader.save(this.request.getParameter(filedName),
 					this.conf);
-			Log.debug("doExec--isBase64--"+state.toJSONString());
+//			Log.debug("doExec--isBase64--"+state.toJSONString());
 		} else {
-			Log.debug("doExec--not isBase64");
+//			Log.debug("doExec--not isBase64");
 			state = BinaryUploader.save(this.request, this.conf);
 			JSONObject stateJson = new JSONObject(state.toJSONString());
 			

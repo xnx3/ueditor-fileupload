@@ -1,5 +1,6 @@
 package com.baidu.ueditor;
 
+import java.io.File;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import com.baidu.ueditor.define.ActionMap;
@@ -25,7 +26,7 @@ public class ActionEnter {
 	public ActionEnter ( HttpServletRequest request, String rootPath ) {
 		
 		//v4.8 增加，避免开发模式下，ue上传会上传到src/main/webapp下的问题
-		int smw = rootPath.indexOf("/src/main/webapp/");
+		int smw = rootPath.indexOf(File.separatorChar+"src"+File.separatorChar+"main"+File.separatorChar+"webapp"+File.separatorChar);
 		// 17 是 /src/main/webapp/ 这个字符的长度
 		if(smw > -1 && smw + 17 == rootPath.length()){
 			//初步判定是在开发环境
