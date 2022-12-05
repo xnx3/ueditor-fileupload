@@ -109,7 +109,19 @@
                 <includes>  
                     <include>module/**</include>  
                 </includes>  
-            </resource>  
+            </resource>
+            
+            <!-- 将 resource/static 下的配置文件拷贝到jar包  -->  
+            <resource>  
+                <!-- 指定resources插件处理哪个目录下的资源文件 -->  
+                <directory>src/main/resources/static/</directory>  
+                <!-- 注意此次必须要放在此目录下才能被访问到 -->  
+                <targetPath>META-INF/resources/</targetPath>  
+                <includes>  
+                    <include>module/**</include>  
+                </includes>
+            </resource> 
+            
         </resources>  
 	</build>
 	
@@ -130,6 +142,7 @@
 			<groupId>cn.zvo.fileupload</groupId>
 			<artifactId>fileupload-framework-springboot</artifactId>
 			<version>1.0</version>
+			<scope>provided</scope>
 		</dependency> 
 		
 		<!-- springboot -->

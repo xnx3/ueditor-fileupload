@@ -5,10 +5,10 @@ ueditor 跟 [FileUpload](https://github.com/xnx3/FileUpload) 的整合，可将�
 #### pom.xml加入 
 
 ````
-<!-- 引入 ueditor -->
+<!-- ueditor编辑器 https://github.com/xnx3/ueditor-fileupload -->
 <dependency> 
 	<groupId>cn.zvo.fileupload</groupId>
-	<artifactId>fileupload-framework.ueditor</artifactId>
+	<artifactId>fileupload-framework-ueditor</artifactId>
 	<version>1.0</version>
 </dependency>
 ````
