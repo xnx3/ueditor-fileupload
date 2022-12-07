@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.baidu.qikemi.packages.utils.SystemUtil;
 import com.baidu.ueditor.define.ActionMap;
+import com.xnx3.FileUtil;
 import com.xnx3.Log;
 
 /**
@@ -164,8 +165,17 @@ public final class ConfigManager {
 //		Log.debug(SystemUtil.getProjectClassesPath()+"/ueditor_config.json");
 //		String projectClassPath = SystemUtil.getProjectClassesPath();
 //		Log.debug("projectClassPath:"+projectClassPath);
-//		Log.debug("config : "+SystemUtil.getProjectClassesPath()+"/ueditor_config.json");
-		String configContent = this.readFile(this.rootPath+"/ueditor_config.json");
+		String ueditorConfigFilePath = this.rootPath+"ueditor_config.json";
+//		Log.debug("ueditor config path1 : "+ueditorConfigFilePath);
+		
+		//判断配置是否存在
+		if(!FileUtil.exists(ueditorConfigFilePath)) {
+			//部署到tomcat时，ueditor_config.json 是存在于 webapps/ROOT/WEB-INF/classes/ueditor_config.json
+			ueditorConfigFilePath = ueditorConfigFilePath.replace("/ueditor_config.json", "/WEB-INF/classes/ueditor_config.json");
+//			Log.debug("继续检测 tomcat ueditor config path : "+ueditorConfigFilePath);
+		}
+		String configContent = this.readFile(ueditorConfigFilePath);
+//		Log.debug("content : "+configContent);
 		
 		try{
 			JSONObject jsonConfig = new JSONObject( configContent );
@@ -212,6 +222,7 @@ public final class ConfigManager {
 			
 		} catch ( UnsupportedEncodingException e ) {
 			// 忽略
+			e.printStackTrace();
 		}
 		
 		return this.filter( builder.toString() );
