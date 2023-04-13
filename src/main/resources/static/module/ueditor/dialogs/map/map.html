@@ -53,7 +53,8 @@
                         map.centerAndZoom(points[0], 13);
                     }
                     point = map.getCenter();
-                    marker.setPoint(point);
+                    marker.setPosition(point);
+                    //marker.setPoint(point);
                 } else {
                     alert(lang.errorMsg);
                 }
