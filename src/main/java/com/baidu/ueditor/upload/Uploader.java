@@ -63,6 +63,10 @@ public class Uploader {
 	
 	public final State doExec() {
 		State state = null;
+		//是否登陆
+		if(!SessionUtil.isLogin()) {
+			return new BaseState(false, "请先登陆");
+		}
 		//是否有限制某用户上传
 		if(!SessionUtil.isAllowUploadForUEditor()){
 			return new BaseState(false, "不允许上传文件");

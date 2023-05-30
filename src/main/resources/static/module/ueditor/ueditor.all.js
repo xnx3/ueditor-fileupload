@@ -24434,7 +24434,7 @@ UE.plugin.register('simpleupload', function (){
             btnIframeBody = btnIframeDoc.body;
             wrapper = btnIframeDoc.createElement('div');
 
-            wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
+            wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '&token='+ localStorage.getItem('token') +'" ' +
             'style="' + btnStyle + '">' +
             '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
             'style="' + btnStyle + '">' +
@@ -24464,7 +24464,7 @@ UE.plugin.register('simpleupload', function (){
 
                 var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
                 var allowFiles = me.getOpt('imageAllowFiles');
-
+				
                 me.focus();
                 me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
@@ -24519,8 +24519,10 @@ UE.plugin.register('simpleupload', function (){
                 }
 
                 domUtils.on(iframe, 'load', callback);
-                form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
-                form.submit();
+                form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&')+'&token='+localStorage.getItem('token')+'&' + params);
+                //console.log(form);
+				//console.log(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
+				form.submit();
             });
 
             var stateTimer;
