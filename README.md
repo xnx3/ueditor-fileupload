@@ -14,6 +14,7 @@ ueditor 跟 [FileUpload](https://github.com/xnx3/FileUpload) 的整合，可将�
 ````
 
 #### src/main/resources/ 下加入 ueditor_config.json
+本项目中这个 ueditor_config.json 在 /src/main/resources/ 下
 
 ````
 /* 前后端通信相关的配置,注释只允许使用多行方式 */
@@ -137,3 +138,6 @@ ue.ready(function() {
 	
 });
 </script>
+
+#### 5. ueditor的更多使用扩展
+参考ueditor官网 http://fex.baidu.com/ueditor/#start-toolbar
