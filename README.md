@@ -138,6 +138,7 @@ ue.ready(function() {
 	
 });
 </script>
+````
 
 #### 5. ueditor的更多使用扩展
 参考ueditor官网 http://fex.baidu.com/ueditor/#start-toolbar
