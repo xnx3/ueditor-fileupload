@@ -9,7 +9,7 @@ ueditor 跟 [FileUpload](https://github.com/xnx3/FileUpload) 的整合，可将�
 <dependency> 
 	<groupId>cn.zvo.fileupload</groupId>
 	<artifactId>fileupload-framework-ueditor</artifactId>
-	<version>1.0</version>
+	<version>1.2</version>
 </dependency>
 ````
 
