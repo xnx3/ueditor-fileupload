@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import com.xnx3.Log;
 import com.xnx3.j2ee.util.ConsoleUtil;
 
+import cn.zvo.fileupload.vo.UploadFileVO;
+
 /**
  * 异步上传文件到阿里云OSS
  * 
@@ -38,7 +40,9 @@ public class AsynUploaderThreader extends Thread {
 	public void run() {
 		SynUploader synUploader = new SynUploader();
 //		synUploader.upload(stateJson, client, request);
-		synUploader.upload(stateJson, request);
+		UploadFileVO vo = synUploader.upload(stateJson, request);
+		System.out.println(vo);
+		System.out.println("com.baidu.qikemi.packages.baidu.ueditor.uploa.asyn");
 		Log.debug("asynchronous upload image to aliyun oss success.");
 	}
 

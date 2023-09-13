@@ -10,6 +10,7 @@ import com.baidu.qikemi.packages.utils.SystemUtil;
 import com.xnx3.Log;
 
 import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
+import cn.zvo.fileupload.vo.UploadFileVO;
 
 
 /**
@@ -47,20 +48,22 @@ public class SynUploader extends Thread {
 //		return false;
 //	}
 
-	public boolean upload(JSONObject stateJson, HttpServletRequest request) {
+	public UploadFileVO upload(JSONObject stateJson, HttpServletRequest request) {
 		String key = stateJson.getString("url").replaceFirst("/", "");
+		UploadFileVO uploadFileVO = null;
 		try {
 			Log.debug("upload--fileInputStream file path: "+SystemUtil.getProjectRootPath() + key);			
 //			FileInputStream fileInputStream = new FileInputStream(new File(
 //					SystemUtil.getProjectRootPath() + key));
 //			ObjectService.putObject(key, fileInputStream);
-			FileUploadUtil.upload(key, SystemUtil.getProjectRootPath() + key);
-			
-			return true;
+
+			uploadFileVO = FileUploadUtil.upload(key, SystemUtil.getProjectRootPath() + key);
 		} catch (NumberFormatException e) {
 			Log.error("upload file to fileupload server occur NumberFormatException.");
+			UploadFileVO vo = new UploadFileVO();
+			vo.setBaseVO(UploadFileVO.FAILURE, e.getMessage());
 		}
-		return false;
+		return uploadFileVO;
 	}
 
 	

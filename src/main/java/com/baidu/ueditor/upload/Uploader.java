@@ -12,6 +12,7 @@ import com.xnx3.Log;
 import com.xnx3.j2ee.util.SessionUtil;
 import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
 import cn.zvo.fileupload.storage.local.LocalStorage;
+import cn.zvo.fileupload.vo.UploadFileVO;
 
 
 /**
@@ -46,7 +47,7 @@ public class Uploader {
 //		} else {
 			Log.debug(state.toJSONString());
 			SynUploader synUploader = new SynUploader();
-			synUploader.upload(stateJson, this.request);
+			UploadFileVO uploadFileVO = synUploader.upload(stateJson, this.request);
 //		}
 //		if (false == OSSClientProperties.useLocalStorager) {
 //			String uploadFilePath = (String) this.conf.get("rootPath") + (String) stateJson.get("url");
@@ -55,6 +56,11 @@ public class Uploader {
 //				uploadFile.delete();
 //			}
 //		}
+		if(uploadFileVO.getResult() - UploadFileVO.FAILURE == 0) {
+			//上传失败
+			state.putInfo("state", uploadFileVO.getInfo());
+			Log.error("上传失败:"+uploadFileVO.getInfo()+",  url:"+stateJson.getString("url"));
+		}
 		state.putInfo("url", stateJson.getString("url"));
 		Log.debug("state.url : "+stateJson.getString("url"));
 		Log.debug("state.url : "+state.toJSONString());
@@ -69,7 +75,7 @@ public class Uploader {
 		}
 		//是否有限制某用户上传
 		if(!SessionUtil.isAllowUploadForUEditor()){
-			return new BaseState(false, "不允许上传文件");
+			return new BaseState(false, "不允许上传文件，可能是您允许上传的存储空间已满");
 		}
 		
 		String filedName = (String) this.conf.get("fieldName");
@@ -140,13 +146,14 @@ public class Uploader {
 						filePath = filePath.substring(1, filePath.length());
 					}
 					state.putInfo("url",  FileUploadUtil.fileupload.getDomain() + SystemUtil.getProjectName() + filePath);
+					
 				}else{
 					//不成功，忽略。自然会在客户端弹出提示
 				}
 			}else{
 				//非本地方式，是先将文件传到本地，再将本地的同步到目标存储上去
 				SynUploader synUploader = new SynUploader();
-				synUploader.upload(stateJson, this.request);
+				UploadFileVO uploadFileVO = synUploader.upload(stateJson, this.request);
 				
 				//判断是否在本地磁盘存在，若存在，那么删除本地磁盘的文件。
 				String uploadFilePath = (String) this.conf.get("rootPath") + (String) stateJson.get("url");
@@ -161,6 +168,12 @@ public class Uploader {
 					uploadPath = uploadPath.substring(1, uploadPath.length());
 				}
 				state.putInfo("url", FileUploadUtil.fileupload.getDomain() + uploadPath);
+				
+				if(uploadFileVO.getResult() - UploadFileVO.FAILURE == 0) {
+					//上传失败
+					state.putInfo("state", uploadFileVO.getInfo());
+					Log.error("上传失败:"+uploadFileVO.getInfo()+",  url:"+stateJson.getString("url"));
+				}
 			}
 			
 			// 判别云同步方式
