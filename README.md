@@ -142,3 +142,12 @@ ue.ready(function() {
 
 #### 5. ueditor的更多使用扩展
 参考ueditor官网 http://fex.baidu.com/ueditor/#start-toolbar
+
+#### 6. 重新定义ueditor的存储方式
+默认是使用的 springboot application.properties 中的配置的
+https://github.com/xnx3/FileUpload/tree/main/framework_springboot  
+也可以手动指定ueditor的配置，但是只有 fileupload-framework-ueditor v1.4及以后版本才能这么做,方式为 
+````
+ConfigManager.setFileUpload(...);
+````
+这个是全局的，只需要设置一次即可。当然设置多次也没啥影响

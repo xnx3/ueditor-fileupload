@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
+
+import com.baidu.ueditor.ConfigManager;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.State;
 import com.baidu.qikemi.packages.baidu.ueditor.upload.SynUploader;
@@ -135,7 +137,9 @@ public class Uploader {
 //				ConsoleUtil.debug("doExec--上传到华为云obs对象存储： "+AttachmentUtil.netUrl() + uploadPath);
 //			}
 			
-			if(FileUploadUtil.isStorage(LocalStorage.class)){
+			
+			
+			if(ConfigManager.getFileUpload().isStorage(LocalStorage.class)){
 				//本地存储
 				
 				//绝对路径，而非原本的相对路径
@@ -145,7 +149,7 @@ public class Uploader {
 					if(filePath != null && filePath.indexOf("/") == 0) {
 						filePath = filePath.substring(1, filePath.length());
 					}
-					state.putInfo("url",  FileUploadUtil.fileupload.getDomain() + SystemUtil.getProjectName() + filePath);
+					state.putInfo("url",  ConfigManager.getFileUpload().getDomain() + SystemUtil.getProjectName() + filePath);
 					
 				}else{
 					//不成功，忽略。自然会在客户端弹出提示
@@ -167,7 +171,7 @@ public class Uploader {
 				if(uploadPath.indexOf("/") == 0){
 					uploadPath = uploadPath.substring(1, uploadPath.length());
 				}
-				state.putInfo("url", FileUploadUtil.fileupload.getDomain() + uploadPath);
+				state.putInfo("url", ConfigManager.getFileUpload().getDomain() + uploadPath);
 				
 				if(uploadFileVO.getResult() - UploadFileVO.FAILURE == 0) {
 					//上传失败

@@ -10,8 +10,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 import com.baidu.qikemi.packages.utils.SystemUtil;
+import com.baidu.ueditor.ConfigManager;
 import com.xnx3.Log;
-import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
 import cn.zvo.fileupload.vo.UploadFileVO;
 
 /**
@@ -130,7 +130,8 @@ public class ObjectService {
 		// 上传Object.
 //		PutObjectResult result = client.putObject(bucketName, key, content, meta);
 		//AttachmentUtil.putForUEditor(key, content, map);
-		UploadFileVO vo = FileUploadUtil.upload(key, content);
+//		UploadFileVO vo = FileUploadUtil.upload(key, content);
+		UploadFileVO vo = ConfigManager.getFileUpload().upload(key, content);
 		Log.debug(vo.toString());
 	}
 	

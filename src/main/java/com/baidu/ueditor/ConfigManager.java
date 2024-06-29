@@ -11,11 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.BeanUtils;
 
 import com.baidu.qikemi.packages.utils.SystemUtil;
 import com.baidu.ueditor.define.ActionMap;
 import com.xnx3.FileUtil;
 import com.xnx3.Log;
+import com.xnx3.j2ee.util.ConsoleUtil;
+
+import cn.zvo.fileupload.FileUpload;
+import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
 
 /**
  * 配置管理器
@@ -23,6 +28,11 @@ import com.xnx3.Log;
  *
  */
 public final class ConfigManager {
+	
+	/**
+	 * 文件上传
+	 */
+	public static FileUpload fileupload;
 
 	private final String rootPath;
 	private final String originalPath;
@@ -234,6 +244,29 @@ public final class ConfigManager {
 		
 		return input.replaceAll( "/\\*[\\s\\S]*?\\*/", "" );
 		
+	}
+	
+	/**
+	 * 获取当前ueditor文件存储的fileupload
+	 * @return
+	 */
+	public static FileUpload getFileUpload() {
+		if(fileupload == null) {
+			fileupload = new FileUpload();
+			
+			BeanUtils.copyProperties(FileUploadUtil.fileupload, fileupload);
+			ConsoleUtil.log("fileupload-framework-ueditor ConfigManager.fileupload init,  copy properties FileUploadUtil.fileupload");
+		}
+		
+		return fileupload;
+	}
+	
+	/**
+	 * 手动赋予 ueditor 的上传方式
+	 * @param fileupload 上传方式
+	 */
+	public static void setFileUpload(FileUpload fileupload) {
+		ConfigManager.fileupload = fileupload;
 	}
 	
 }

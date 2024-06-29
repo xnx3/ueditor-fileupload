@@ -7,9 +7,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 import com.baidu.qikemi.packages.utils.SystemUtil;
+import com.baidu.ueditor.ConfigManager;
 import com.xnx3.Log;
-
-import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
 import cn.zvo.fileupload.vo.UploadFileVO;
 
 
@@ -57,7 +56,8 @@ public class SynUploader extends Thread {
 //					SystemUtil.getProjectRootPath() + key));
 //			ObjectService.putObject(key, fileInputStream);
 
-			uploadFileVO = FileUploadUtil.upload(key, SystemUtil.getProjectRootPath() + key);
+//			uploadFileVO = FileUploadUtil.upload(key, SystemUtil.getProjectRootPath() + key);
+			uploadFileVO = ConfigManager.getFileUpload().upload(key, SystemUtil.getProjectRootPath() + key);
 		} catch (NumberFormatException e) {
 			Log.error("upload file to fileupload server occur NumberFormatException.");
 			UploadFileVO vo = new UploadFileVO();
