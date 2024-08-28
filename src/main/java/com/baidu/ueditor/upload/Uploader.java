@@ -156,8 +156,20 @@ public class Uploader {
 				}
 			}else{
 				//非本地方式，是先将文件传到本地，再将本地的同步到目标存储上去
-				SynUploader synUploader = new SynUploader();
-				UploadFileVO uploadFileVO = synUploader.upload(stateJson, this.request);
+//				SynUploader synUploader = new SynUploader();
+//				UploadFileVO uploadFileVO = synUploader.upload(stateJson, this.request);
+				
+				String key = stateJson.getString("url").replaceFirst("/", "");
+				UploadFileVO uploadFileVO = null;
+				try {
+					Log.debug("upload--fileInputStream file path: "+SystemUtil.getProjectRootPath() + key);			
+					uploadFileVO = ConfigManager.getFileUpload().upload(key, SystemUtil.getProjectRootPath() + key);
+				} catch (NumberFormatException e) {
+					Log.error("upload file to fileupload server occur NumberFormatException.");
+//					UploadFileVO vo = new UploadFileVO();
+//					vo.setBaseVO(UploadFileVO.FAILURE, e.getMessage());
+					return new BaseState(false, "上传时异常:"+e.getMessage());
+				}
 				
 				//判断是否在本地磁盘存在，若存在，那么删除本地磁盘的文件。
 				String uploadFilePath = (String) this.conf.get("rootPath") + (String) stateJson.get("url");
@@ -168,10 +180,11 @@ public class Uploader {
 				
 				//组合url
 				String uploadPath = stateJson.getString("url"); //上传的路径，如  /site/219/news/20191119/2234234.png
-				if(uploadPath.indexOf("/") == 0){
-					uploadPath = uploadPath.substring(1, uploadPath.length());
-				}
-				state.putInfo("url", ConfigManager.getFileUpload().getDomain() + uploadPath);
+//				if(uploadPath.indexOf("/") == 0){
+//					uploadPath = uploadPath.substring(1, uploadPath.length());
+//				}
+//				state.putInfo("url", ConfigManager.getFileUpload().getDomain() + uploadPath);
+				state.putInfo("url", ConfigManager.getFileUpload().getDomain() + uploadFileVO.getPath());
 				
 				if(uploadFileVO.getResult() - UploadFileVO.FAILURE == 0) {
 					//上传失败
