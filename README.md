@@ -151,3 +151,8 @@ https://github.com/xnx3/FileUpload/tree/main/framework_springboot
 ConfigManager.setFileUpload(...);
 ````
 这个是全局的，只需要设置一次即可。当然设置多次也没啥影响
+
+
+## 本项目二开
+直接运行 com.Application.java
+跑起来后，访问 localhost:8080/index.do 即可看到ueditor编辑器界面。

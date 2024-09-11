@@ -6,11 +6,18 @@
 
 	<groupId>cn.zvo.fileupload</groupId>
 	<artifactId>fileupload-framework-ueditor</artifactId>
-	<version>1.4.1</version>
+	<version>1.5</version>
 	<packaging>jar</packaging>
 
 	<description>java file upload</description>
 	<url>https://github.com/xnx3/ueditor-fileupload</url>
+
+	<!-- 定义公共资源版本  这个是在 https://gitee.com/leimingyun/wm_parent -->
+	  <parent>
+	    <groupId>com.xnx3.wangmarket.wm</groupId>
+	    <artifactId>parent</artifactId>
+	    <version>3.20</version>
+	  </parent>
 
 	<licenses>
 		<license>
@@ -126,37 +133,11 @@
 	</build>
 	
 	<dependencies>  
-		<dependency> 
-			<groupId>cn.zvo.fileupload</groupId>
-			<artifactId>fileupload-core</artifactId>
-			<version>2.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency> 
-	        <groupId>com.xnx3.util</groupId>
-			<artifactId>xnx3-util</artifactId>
-	        <version>1.16</version>  
-	    </dependency>
-		
-		<dependency>
-		    <groupId>org.json</groupId>
-		    <artifactId>json</artifactId>
-		    <version>20180130</version>
-		</dependency>
-		
-		<!-- springboot -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>2.6.1</version>
-			<scope>provided</scope>
-		</dependency>
-		
 		<dependency>
 		  <groupId>com.xnx3.wangmarket.wm</groupId>
 		  <artifactId>wm</artifactId>
 		  <scope>provided</scope>
-		  <version>2.26.5</version>
+		  <version>3.20</version>
 		</dependency>
 		
 	</dependencies>
