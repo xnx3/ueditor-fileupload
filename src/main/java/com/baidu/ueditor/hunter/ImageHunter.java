@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import com.baidu.ueditor.ConfigManager;
 import com.baidu.ueditor.PathFormat;
 import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
@@ -12,6 +14,8 @@ import com.baidu.ueditor.define.MIMEType;
 import com.baidu.ueditor.define.MultiState;
 import com.baidu.ueditor.define.State;
 import com.baidu.ueditor.upload.StorageManager;
+
+import cn.zvo.fileupload.vo.UploadFileVO;
 
 /**
  * 图片抓取器
@@ -84,16 +88,18 @@ public class ImageHunter {
 			}
 			
 			String savePath = this.getPath( this.savePath, this.filename, suffix );
-			String physicalPath = this.rootPath + savePath;
-
-			State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath );
+//			String physicalPath = this.rootPath + savePath;
+			String physicalPath = savePath;
+			UploadFileVO uploadFileVO = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath );
 			
-			if ( state.isSuccess() ) {
-				state.putInfo( "url", PathFormat.format( savePath ) );
+			if ( uploadFileVO.getResult() - UploadFileVO.SUCCESS == 0 ) {
+				State state = new BaseState(true);
+				state.putInfo( "url", uploadFileVO.getUrl() );
 				state.putInfo( "source", urlStr );
+				return state;
+			}else {
+				return new BaseState(false, uploadFileVO.getInfo());
 			}
-			
-			return state;
 			
 		} catch ( Exception e ) {
 			return new BaseState( false, AppInfo.REMOTE_FAIL );

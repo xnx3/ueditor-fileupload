@@ -10,6 +10,7 @@ import com.baidu.ueditor.define.State;
 import com.baidu.ueditor.hunter.FileManager;
 import com.baidu.ueditor.hunter.ImageHunter;
 import com.baidu.ueditor.upload.Uploader;
+import com.xnx3.FileUtil;
 import com.xnx3.Log;
 import com.xnx3.j2ee.util.SystemUtil;
 
@@ -34,6 +35,10 @@ public class ActionEnter {
 			//获取当前路径，进而确认是否真的是开发模式
 			String path = SystemUtil.getProjectPath();
 			if(path.indexOf("/target/classes/") + 16 == path.length()){
+				//判断  ueditor-fileupload/target/classes/ueditor_config.json 是否存在，如果不存在就指向src/main/resources/ueditor_config.json
+				if(!FileUtil.exists(path+"ueditor_config.json")) {
+					path = path.replace("target/classes/", "")+"src/main/resources/";
+				}
 				rootPath = path;
 			}
 		}

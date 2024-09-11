@@ -141,7 +141,7 @@
             }
         }()
         //抓取远程图片是否开启,默认true，true：如果图片不是再此域名下，就将其抓取到本服务器。若为false，则不抓取，只是将图片绝对路径拿来
-        ,catchRemoteImageEnable:false
+        ,catchRemoteImageEnable:true
 
         //,allHtmlEnabled:false //提交到后台的数据是否包含整个html字符串
 

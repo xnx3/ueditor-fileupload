@@ -5,6 +5,9 @@ import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.FileType;
 import com.baidu.ueditor.define.State;
+
+import cn.zvo.fileupload.vo.UploadFileVO;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -66,20 +69,25 @@ public class BinaryUploader {
 			
 			
 			savePath = PathFormat.parse(savePath, originFileName);
-			String physicalPath = (String) conf.get("rootPath") + savePath;
+			String physicalPath = savePath;
 
 			InputStream is = fileStream.openStream();
-			State storageState = StorageManager.saveFileByInputStream(is,
-					physicalPath, maxSize);
+//			State storageState = StorageManager.saveFileByInputStream(is,
+//					physicalPath, maxSize);
+			UploadFileVO uploadVO = StorageManager.saveFileByInputStream(is,
+					physicalPath);
 			is.close();
-
-			if (storageState.isSuccess()) {
-				storageState.putInfo("url", PathFormat.format(savePath));
-				storageState.putInfo("type", suffix);
-				storageState.putInfo("original", originFileName + suffix);
+			
+			if ( uploadVO.getResult() - UploadFileVO.SUCCESS == 0 ) {
+				State state = new BaseState(true);
+				state.putInfo( "url", uploadVO.getUrl() );
+				state.putInfo( "type", suffix );
+				state.putInfo( "original",  originFileName + suffix );
+				return state;
+			}else {
+				return new BaseState(false, uploadVO.getInfo());
 			}
-
-			return storageState;
+			
 		} catch (FileUploadException e) {
 			return new BaseState(false, AppInfo.PARSE_REQUEST_ERROR);
 		} catch (IOException e) {

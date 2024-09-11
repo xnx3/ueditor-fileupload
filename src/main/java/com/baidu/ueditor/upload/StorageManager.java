@@ -1,8 +1,14 @@
 package com.baidu.ueditor.upload;
 
+import com.baidu.qikemi.packages.utils.SystemUtil;
+import com.baidu.ueditor.ConfigManager;
 import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.State;
+import com.xnx3.Log;
+
+import cn.zvo.fileupload.vo.UploadFileVO;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -42,6 +48,13 @@ public class StorageManager {
 		return state;
 	}
 
+	/**
+	 * @deprecated
+	 * @param is
+	 * @param path
+	 * @param maxSize
+	 * @return
+	 */
 	public static State saveFileByInputStream(InputStream is, String path,
 			long maxSize) {
 		State state = null;
@@ -80,35 +93,41 @@ public class StorageManager {
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
 
-	public static State saveFileByInputStream(InputStream is, String path) {
-		State state = null;
+	public static UploadFileVO saveFileByInputStream(InputStream is, String path) {
 
-		File tmpFile = getTmpFile();
-
-		byte[] dataBuf = new byte[ 2048 ];
-		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
-
-		try {
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
-
-			int count = 0;
-			while ((count = bis.read(dataBuf)) != -1) {
-				bos.write(dataBuf, 0, count);
-			}
-			bos.flush();
-			bos.close();
-
-			state = saveTmpFile(tmpFile, path);
-
-			if (!state.isSuccess()) {
-				tmpFile.delete();
-			}
-
-			return state;
-		} catch (IOException e) {
-		}
-		return new BaseState(false, AppInfo.IO_ERROR);
+//		File tmpFile = getTmpFile();
+//
+//		byte[] dataBuf = new byte[ 2048 ];
+//		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
+//
+//		try {
+//			BufferedOutputStream bos = new BufferedOutputStream(
+//					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
+//
+//			int count = 0;
+//			while ((count = bis.read(dataBuf)) != -1) {
+//				bos.write(dataBuf, 0, count);
+//			}
+//			bos.flush();
+//			bos.close();
+//
+//			state = saveTmpFile(tmpFile, path);
+//
+//			if (!state.isSuccess()) {
+//				tmpFile.delete();
+//			}
+//
+//			return state;
+//		} catch (IOException e) {
+//		}
+//		return new BaseState(false, AppInfo.IO_ERROR);
+		
+		Log.info(path);
+		if (path.charAt(0) == '/') {
+            path = path.substring(1);
+        }
+		UploadFileVO uploadFileVO = ConfigManager.getFileUpload().upload(path, is);
+		return uploadFileVO;
 	}
 
 	private static File getTmpFile() {
