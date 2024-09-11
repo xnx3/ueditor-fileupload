@@ -53,6 +53,24 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<!-- 打包成jar时，忽略的包 -->
+            			<exclude>**/com/Application*</exclude>
+            			<exclude>**/com/xnx3/controller/**</exclude>
+          			</excludes>
+					<archive>  
+						<manifest>  
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>  
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			
 			<!-- Source -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
