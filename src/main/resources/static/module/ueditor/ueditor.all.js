@@ -23191,7 +23191,7 @@ UE.plugins['catchremoteimage'] = function () {
                     } catch (e) {
                         return;
                     }
-
+					
                     /* 获取源路径和新路径 */
                     var i, j, ci, cj, oldSrc, newSrc, list = info.list;
 
@@ -23209,10 +23209,12 @@ UE.plugins['catchremoteimage'] = function () {
                         }
                     }
                     me.fireEvent('catchremotesuccess')
+					msg.success('抓取成功');
                 },
                 //回调失败，本次请求超时
                 error: function () {
                     me.fireEvent("catchremoteerror");
+					msg.success('抓取失败，请求超时');
                 }
             });
         }
@@ -23224,11 +23226,12 @@ UE.plugins['catchremoteimage'] = function () {
                 opt = {
                     'method': 'POST',
                     'dataType': isJsonp ? 'jsonp':'',
-                    'timeout': 60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
+                    'timeout': 600000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
                     'onsuccess': callbacks["success"],
                     'onerror': callbacks["error"]
                 };
             opt[catcherFieldName] = imgs;
+console.log(opt);
             ajax.request(url, opt);
         }
 

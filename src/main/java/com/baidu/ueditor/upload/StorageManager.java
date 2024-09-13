@@ -93,7 +93,7 @@ public class StorageManager {
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
 
-	public static UploadFileVO saveFileByInputStream(InputStream is, String path) {
+	public synchronized static UploadFileVO saveFileByInputStream(InputStream is, String path) {
 
 //		File tmpFile = getTmpFile();
 //

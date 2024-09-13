@@ -3,7 +3,9 @@ package com.xnx3.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +39,7 @@ import com.xnx3.j2ee.vo.UploadFileVO;
 
 import cn.zvo.fileupload.FileUpload;
 import cn.zvo.fileupload.framework.springboot.FileUploadUtil;
+import cn.zvo.fileupload.storage.sftp.SftpStorage;
 import net.sf.json.JSONObject;
 
 /**
@@ -56,11 +59,24 @@ public class IndexController extends BaseController {
 	@RequestMapping("index.do")
 	public String index(HttpServletRequest request,Model model){
 		
+		
+		
+		
 		Uploader.isdebug = true;
 		FileUpload fileupload = new FileUpload();
 		fileupload.setDomain("http://localhost:8080/");
-		ConfigManager.setFileUpload(fileupload);
 		
+		
+		/**** 定义存储位置，存储到SFTP中 ****/
+		Map<String, String> config = new HashMap<String, String>();
+		config.put("host", "192.168.31.54");
+		config.put("username", "root");
+		config.put("password", "jiayouzhan");
+		SftpStorage storage = new SftpStorage(config);
+		fileupload.setStorage(storage);	//设置使用oss存储
+		/*** 结束。 上面sftp这段全部注释掉则是用本地存储 ***/
+		
+		ConfigManager.setFileUpload(fileupload);
 		return "/index";
 	}
 	
