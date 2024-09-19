@@ -56,6 +56,14 @@ public class ImageHunter {
 	}
 
 	public State captureRemoteData ( String urlStr ) {
+		if(urlStr.indexOf(ConfigManager.getFileUpload().getDomain()) > -1) {
+			//本来就有的图片，就不用再上传了。 这里是ueditor中已经有图片，再粘贴文章时，窗口中所有的图都会触发再次上传
+			State state = new BaseState(true);
+			state.putInfo( "url", urlStr );
+			state.putInfo( "source", urlStr );
+			return state;
+		}
+		
 		
 		HttpURLConnection connection = null;
 		URL url = null;

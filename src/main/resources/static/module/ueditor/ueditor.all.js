@@ -23220,7 +23220,7 @@ UE.plugins['catchremoteimage'] = function () {
                     me.fireEvent("catchremoteerror");
 					try{
 						msg.close();
-						msg.success('抓取失败，请求超时');
+						msg.failure('抓取失败，请求超时');
 					}catch(e){ console.log(e); }
                 }
             });
@@ -23238,9 +23238,12 @@ UE.plugins['catchremoteimage'] = function () {
                     'onerror': callbacks["error"]
                 };
             opt[catcherFieldName] = imgs;
-			try{
-				msg.loading('正在将远程图片抓取保存到自己这里...');
-			}catch(e){ console.log(e); }
+			if(url.indexOf('action=catchimage') > -1){
+				try{
+					msg.loading('正在将远程图片抓取保存到自己这里...');
+				}catch(e){ console.log(e); }
+			}
+			
             ajax.request(url, opt);
         }
 
@@ -23789,6 +23792,9 @@ UE.plugin.register('autoupload', function (){
         xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.addEventListener('load', function (e) {
+			try{
+				msg.close();
+			}catch(e){ console.log(e); }
             try{
                 var json = (new Function("return " + utils.trim(e.target.response)))();
                 if (json.state == 'SUCCESS' && json.url) {
