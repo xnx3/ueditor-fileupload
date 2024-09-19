@@ -23209,12 +23209,19 @@ UE.plugins['catchremoteimage'] = function () {
                         }
                     }
                     me.fireEvent('catchremotesuccess')
-					msg.success('抓取成功');
+					
+					try{
+						msg.close();
+						msg.success('抓取完成');
+					}catch(e){ console.log(e); }
                 },
                 //回调失败，本次请求超时
                 error: function () {
                     me.fireEvent("catchremoteerror");
-					msg.success('抓取失败，请求超时');
+					try{
+						msg.close();
+						msg.success('抓取失败，请求超时');
+					}catch(e){ console.log(e); }
                 }
             });
         }
@@ -23231,7 +23238,9 @@ UE.plugins['catchremoteimage'] = function () {
                     'onerror': callbacks["error"]
                 };
             opt[catcherFieldName] = imgs;
-console.log(opt);
+			try{
+				msg.loading('正在将远程图片抓取保存到自己这里...');
+			}catch(e){ console.log(e); }
             ajax.request(url, opt);
         }
 
